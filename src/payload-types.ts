@@ -35,11 +35,11 @@ export interface Config {
     plans: PlansSelect<false> | PlansSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
-    logos: LogosSelect<false> | LogosSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    logos: LogosSelect1<false> | LogosSelect1<true>;
+    testimonials: TestimonialsSelect1<false> | TestimonialsSelect1<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    forms: FormsSelect<false> | FormsSelect<true>;
+    forms: FormsSelect1<false> | FormsSelect1<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -196,6 +196,9 @@ export interface Page {
                 } | null;
                 url?: string | null;
                 label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
                 appearance?: ('default' | 'outline') | null;
               };
               id?: string | null;
@@ -213,6 +216,9 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (string | null) | Media;
     description?: string | null;
   };
@@ -328,6 +334,9 @@ export interface Post {
   categories?: (string | Category)[] | null;
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (string | null) | Media;
     description?: string | null;
   };
@@ -419,6 +428,9 @@ export interface Product {
   plans?: (string | Plan)[] | null;
   meta?: {
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (string | null) | Media;
     description?: string | null;
   };
@@ -597,6 +609,9 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
+  /**
+   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
+   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -616,6 +631,9 @@ export interface Form {
   redirect?: {
     url: string;
   };
+  /**
+   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
+   */
   emails?:
     | {
         emailTo?: string | null;
@@ -624,6 +642,9 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
+        /**
+         * Enter the message that should be sent in this email.
+         */
         message?: {
           root: {
             type: string;
@@ -939,30 +960,8 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        postsArchive?:
-          | T
-          | {
-              content?: T;
-              populateBy?: T;
-              relationTo?: T;
-              categories?: T;
-              limit?: T;
-              selectedDocs?: T;
-              id?: T;
-              blockName?: T;
-            };
-        productsArchive?:
-          | T
-          | {
-              content?: T;
-              populateBy?: T;
-              relationTo?: T;
-              categories?: T;
-              limit?: T;
-              selectedDocs?: T;
-              id?: T;
-              blockName?: T;
-            };
+        postsArchive?: T | PostsArchiveSelect<T>;
+        productsArchive?: T | ProductsArchiveSelect<T>;
         cta?:
           | T
           | {
@@ -985,43 +984,11 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        forms?:
-          | T
-          | {
-              form?: T;
-              enableContent?: T;
-              content?: T;
-              id?: T;
-              blockName?: T;
-            };
-        pricingPlans?:
-          | T
-          | {
-              caption?: T;
-              id?: T;
-              blockName?: T;
-            };
-        faqs?:
-          | T
-          | {
-              caption?: T;
-              id?: T;
-              blockName?: T;
-            };
-        logos?:
-          | T
-          | {
-              caption?: T;
-              id?: T;
-              blockName?: T;
-            };
-        testimonials?:
-          | T
-          | {
-              caption?: T;
-              id?: T;
-              blockName?: T;
-            };
+        forms?: T | FormsSelect<T>;
+        pricingPlans?: T | PricingPlansSelect<T>;
+        faqs?: T | FAQSSelect<T>;
+        logos?: T | LogosSelect<T>;
+        testimonials?: T | TestimonialsSelect<T>;
       };
   meta?:
     | T
@@ -1036,6 +1003,81 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsArchive_select".
+ */
+export interface PostsArchiveSelect<T extends boolean = true> {
+  content?: T;
+  populateBy?: T;
+  relationTo?: T;
+  categories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductsArchive_select".
+ */
+export interface ProductsArchiveSelect<T extends boolean = true> {
+  content?: T;
+  populateBy?: T;
+  relationTo?: T;
+  categories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Forms_select".
+ */
+export interface FormsSelect<T extends boolean = true> {
+  form?: T;
+  enableContent?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PricingPlans_select".
+ */
+export interface PricingPlansSelect<T extends boolean = true> {
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQS_select".
+ */
+export interface FAQSSelect<T extends boolean = true> {
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Logos_select".
+ */
+export interface LogosSelect<T extends boolean = true> {
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  caption?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1148,7 +1190,7 @@ export interface FaqsSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "logos_select".
  */
-export interface LogosSelect<T extends boolean = true> {
+export interface LogosSelect1<T extends boolean = true> {
   company?: T;
   logoImage?: T;
   updatedAt?: T;
@@ -1158,7 +1200,7 @@ export interface LogosSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials_select".
  */
-export interface TestimonialsSelect<T extends boolean = true> {
+export interface TestimonialsSelect1<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
   job?: T;
@@ -1210,7 +1252,7 @@ export interface UsersSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms_select".
  */
-export interface FormsSelect<T extends boolean = true> {
+export interface FormsSelect1<T extends boolean = true> {
   title?: T;
   fields?:
     | T
