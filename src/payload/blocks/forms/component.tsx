@@ -32,7 +32,7 @@ export type FormBlockType = {
 	}[];
 };
 
-const publicURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_SERVER_URL_DEV! : process.env.NEXT_PUBLIC_SERVER_URL_PRD!;
+const publicURL = process.env.NEXT_PUBLIC_SERVER_URL!;
 
 export const FormBlock = (props: { id?: string } & FormBlockType) => {
 	const {

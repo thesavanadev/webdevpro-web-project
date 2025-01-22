@@ -39,18 +39,13 @@ import { Page, Post } from "@/payload-types";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
-const databaseURI = process.env.NODE_ENV === "development" ? process.env.DATABASE_URI_DEV! : process.env.DATABASE_URI_PRD!;
-const payloadSecret = process.env.PAYLOAD_SECRET!;
-const resendAPIKey = process.env.RESEND_API_KEY!;
-const uploadthingToken = process.env.UPLOADTHING_TOKEN!;
-const publicURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_SERVER_URL_DEV! : process.env.NEXT_PUBLIC_SERVER_URL_PRD!;
 
 const generateTitle: GenerateTitle<Page | Post> = ({ doc }) => {
 	return doc?.title ? `${doc.title} | WebDevPro` : "WebDevPro";
 };
 
 const generateURL: GenerateURL<Page | Post> = ({ doc }) => {
-	return doc?.slug ? `${publicURL}/${doc.slug}` : publicURL;
+	return doc?.slug ? `${process.env.NEXT_PUBLIC_SERVER_URL!}/${doc.slug}` : process.env.NEXT_PUBLIC_SERVER_URL!;
 };
 
 export default buildConfig({
@@ -86,7 +81,7 @@ export default buildConfig({
 		user: Users.slug,
 	},
 	collections: [Pages, Posts, Products, Plans, Categories, Faqs, Logos, Testimonials, Media, Users],
-	db: mongooseAdapter({ url: databaseURI }),
+	db: mongooseAdapter({ url: process.env.DATABASE_URI! }),
 	editor: lexicalEditor({
 		features: () => {
 			return [
@@ -122,9 +117,9 @@ export default buildConfig({
 		},
 	}),
 	email: resendAdapter({
-		defaultFromAddress: "mailer@s3.co.ke",
-		defaultFromName: "Mailer @ S3",
-		apiKey: resendAPIKey,
+		defaultFromAddress: process.env.RESEND_FROM_EMAIL!,
+		defaultFromName: process.env.RESEND_FROM_NAME!,
+		apiKey: process.env.RESEND_API_KEY!,
 	}),
 	globals: [Header, Footer],
 	plugins: [
@@ -169,12 +164,12 @@ export default buildConfig({
 				[Media.slug]: true,
 			},
 			options: {
-				token: uploadthingToken,
+				token: process.env.UPLOADTHING_TOKEN!,
 				acl: "public-read",
 			},
 		}),
 	],
-	secret: payloadSecret,
+	secret: process.env.PAYLOAD_SECRET!,
 	sharp,
 	typescript: {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
