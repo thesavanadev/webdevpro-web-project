@@ -15,8 +15,6 @@ import "@/frontend/global.css";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
-const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_SERVER_URL_DEV! : process.env.NEXT_PUBLIC_SERVER_URL_PRD!;
-
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
@@ -44,7 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 }
 
 export const metadata: Metadata = {
-	metadataBase: new URL(serverURL),
+	metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL!),
 	openGraph: mergeOpenGraph(),
 	twitter: {
 		card: "summary_large_image",

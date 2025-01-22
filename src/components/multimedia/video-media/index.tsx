@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 import type { Props as MediaProps } from "@/components/multimedia/types";
 
-const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_SERVER_URL_DEV! : process.env.NEXT_PUBLIC_SERVER_URL_PRD!;
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL!;
 
 export const VideoMedia = (props: MediaProps) => {
 	const { onClick, resource, videoClassName } = props;
